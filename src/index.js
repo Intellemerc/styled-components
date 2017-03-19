@@ -8,6 +8,8 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { ThemeProvider } from 'styled-components';
 
+import changeHue from './changeHue'
+
 injectTapEventPlugin();
 
 class Index extends React.Component {
@@ -15,13 +17,21 @@ class Index extends React.Component {
     super(...arguments);
     this.state = {
       theme: {
-        main: 'orange',
-        secondary: 'red'
+        main: '#101543',
+        secondary: '#968D81'
       }
     };
     this.toggleColors = this.toggleColors.bind(this);
+    this.changeColors = this.changeColors.bind(this);
   }
-
+  changeColors(evt, newVal){
+    this.setState({
+      theme: {
+        main: changeHue(this.state.theme.secondary, newVal),
+        secondary: changeHue(this.state.theme.main, newVal)
+      }
+    });
+  }
   toggleColors() {
     this.setState({
       theme: {
@@ -40,7 +50,7 @@ class Index extends React.Component {
     });
     return <ThemeProvider theme={this.state.theme}>
       <MuiThemeProvider muiTheme={materialTheme}>
-        <App changeTheme={this.toggleColors}/>
+        <App changeTheme={this.toggleColors} changeColor={this.changeColors}/>
       </MuiThemeProvider>
     </ThemeProvider >;
   }
